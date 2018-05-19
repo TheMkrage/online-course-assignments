@@ -13,9 +13,9 @@ J = 0;
 % Instructions: Compute the cost of a particular choice of theta
 %               You should set J to the cost.
 
-
-
-
+outside_term = 1 / (2 * m);
+hyp = X * theta;
+J = outside_term * sum( (hyp - y) .^ 2 );
 
 % =========================================================================
 
