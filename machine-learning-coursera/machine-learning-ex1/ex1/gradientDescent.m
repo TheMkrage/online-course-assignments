@@ -21,11 +21,7 @@ for iter = 1:num_iters
   for theta_index = 1:length(theta)
     current_feature = X(:, theta_index);
     derivate_with_respect_to_theta_index = (1/m) * sum((hyp - y) .* current_feature);
-    #printf("%d\n", derivate_with_respect_to_theta_index);
-    #printf("%d - (%d * %d)\n", theta(theta_index), alpha, derivate_with_respect_to_theta_index);
-    cur_theta = theta(theta_index, 1);
     temp_thetas(theta_index, 1) = theta(theta_index, 1) - (alpha * derivate_with_respect_to_theta_index);
-    
   end
   theta = temp_thetas;
   
