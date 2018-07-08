@@ -31,8 +31,8 @@ X = [ones(m, 1) X];
 %       
 
 
-
-
+each_prediction = sigmoid(X * all_theta'); # get each prediction
+[~, p] = max(each_prediction, [], 2); # find the max prediction for each example
 
 
 

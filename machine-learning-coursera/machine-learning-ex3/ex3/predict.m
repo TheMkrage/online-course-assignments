@@ -21,11 +21,14 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+X = [ones(m, 1) X];
 
+layer_2 = sigmoid(X * Theta1');
+layer_2 = [ones(m, 1) layer_2];
 
+layer_3 = sigmoid(layer_2 * Theta2');
 
-
-
+[~, p] = max(layer_3, [], 2); # find the max prediction for each example
 
 
 
