@@ -62,30 +62,68 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+# Forward
+a1 = [ones(m, 1), X];
+
+z2 = a1 * Theta1';
+size(z2)
+a2 = sigmoid(z2);
+a2 = [ones(size(a2, 1), 1), a2];
+
+z3 = a2 * Theta2';
+a3 = sigmoid(z3);
+J = 0;
+
+# Make a matrix with 0's and 1's based on y
+yBinaryMatrix = zeros(size(y), size(a3, 2));
+
+for i = 1:m
+    yBinaryMatrix(i, y(i)) = 1;
+end
+
+J = (1/m) * sum(sum( -yBinaryMatrix .* log( a3 ) - ( 1 -  yBinaryMatrix ) .* log( 1 - a3 )));
+
+# REGULARIZATION
+Theta1Reg = Theta1(:, 2:end);
+Theta2Reg = Theta2(:, 2:end);
+
+reg  = (lambda / (2 * m)) * (sum(sum(Theta1Reg .^ 2)) + sum(sum(Theta2Reg .^ 2)));
+J += reg;
 
 
+# Back Prop
+Delta1 = 0;
+Delta2 = 0;
 
+for t = 1:m
+	a1 = [1; X(t, :)']; 
+  
+	z2 = Theta1 * a1;
+  size(z2)
+  a2 = sigmoid(z2);
+	a2 = [1; a2];
 
+	z3 = Theta2 * a2;
+	a3 = sigmoid(z3);
+  
+	d3 = a3 - yBinaryMatrix(t, :)';
+	d2 = (Theta2' * d3) .* [1; sigmoidGradient(z2)];
+  
+  d2 = d2(2:end);
 
+	Delta2 += (d3 * a2');
+	Delta1 += (d2 * a1');
+end
 
+# Gradient Calculations
+Theta1_grad = (1 / m) * Delta1;
+Theta2_grad = (1 / m) * Delta2;
 
+# Gradient REG
+Theta1_grad(:, 2:end) += ((lambda / m) * Theta1Reg);
+Theta2_grad(:, 2:end) += ((lambda / m) * Theta2Reg);
 
-
-
-
-
-
-
-
-
-
-
-% -------------------------------------------------------------
-
-% =========================================================================
-
-% Unroll gradients
+% Unroll 
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
-
 
 end
