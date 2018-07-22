@@ -23,7 +23,30 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+# Code to find best C and sigma
+#{
+lowestError = 1000;
+for CIterator = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]
+  for sigmaIterator = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]
+    # Train Model first
+    model= svmTrain(X, y, CIterator, @(x1, x2) gaussianKernel(x1, x2, sigmaIterator));
+    predictions = svmPredict(model, Xval);
+    error = mean(double(predictions ~= yval));
+    
+    if error < lowestError;
+      lowestError = error;
+      C = CIterator;
+      sigma = sigmaIterator;
+      C
+      sigma
+    end
+  end
+end
+#}
 
+# Found using the above code
+C = 1;
+sigma = 0.1;
 
 
 
