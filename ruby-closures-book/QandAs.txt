@@ -1,0 +1,82 @@
+Chapter 1: Closing in on Closures
+
+1. What is the definition of a closure?
+- A standalone function that contains information about its free variables 
+
+2. Identify the free variable in the following:
+​ 	​def​ is_larger_than(amount)
+​ 	  lambda ​do​ |a|
+​ 	    a > amount
+​ 	  ​end​
+​ 	​end​
+Here’s an example run:
+
+​ 	​>>​ larger_than_5 = is_larger_than(5)
+​ 	
+​ 	​>>​ larger_than_5.call(4)
+​ 	​=>​ ​false​
+​ 	
+​ 	​>>​ larger_than_5.call(5)
+​ 	​=>​ ​false​
+​ 	
+​ 	​>>​ larger_than_5.call(6)
+​ 	​=>​ ​true​
+
+- The free variable is amount.
+
+3. You work in a music store and you’ve been tasked with writing a miniature database to store artists and album titles. The database should be able to insert, delete, and list entries, but you cannot use objects other than arrays and hashes. Only lambdas are allowed. Here’s the API:
+
+​ 	​>>​ db = new_db.call
+​ 	
+​ 	​>>​ db[​:insert​].call(​"Eagles"​, ​"Hell Freezes Over"​)
+​ 	​=>​ Hell Freezes Over
+​ 	
+​ 	​>>​ db[​:insert​].call(​"Pink Floyd"​, ​"The Wall"​)
+​ 	​=>​ The Wall
+​ 	
+​ 	​>>​ db[​:dump​].call
+​ 	​=>​ {​"Eagles"​=>​"Hell Freezes Over"​, ​"Pink Floyd"​=>​"The Wall"​}
+​ 	
+​ 	​>>​ db[​:delete​].call(​"Pink Floyd"​)
+​ 	​=>​ The Wall
+​ 	
+​ 	​>>​ db[​:dump​].call
+​ 	​=>​ {​"Eagles"​=>​"Hell Freezes Over"​, ​"Pink Floyd"​=>​nil​}
+
+- Here is my code (not exactly Ruby, but close enough):
+lambda do 
+	entries = []
+	{
+	:dump => lambda { entries },
+	:delete => lambda { |items| entries.remove_all(items) },
+	:insert => lambda { |items| entries.add_all(items) }
+	}
+end
+
+
+4. The complement method was previously defined as such:
+
+​ 	​def​ complement(predicate)
+​ 	  lambda ​do​ |value|
+​ 	    not predicate.call(value)
+​ 	  ​end​
+​ 	​end​
+Convert complement into a lambda that returns another lambda. You should then be able to invoke complement like so:
+
+​ 	​>>​ complement.call(is_even).call(4)
+​ 	​=>​ ​false​
+​ 	
+​ 	​>>​ complement.call(is_even).call(5)
+​ 	​=>​ ​true​
+
+- Here is my code:
+
+​def​ complement()
+​  lambda ​do​ | predicate |
+    Lambda do | value |
+​    	not predicate.call(value)
+    end
+  ​end​
+​end​
+
+
